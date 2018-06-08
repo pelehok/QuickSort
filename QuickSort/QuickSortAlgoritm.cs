@@ -8,12 +8,15 @@ namespace QuickSort
 {
     public class QuickSortAlgoritm
     {
+        public delegate void AddOne();
+        public event AddOne AddOneHandler;
         public int Partition(List<int> inputList, int leftIndex,int rightIndex)
         {
             int p = inputList[leftIndex];
             int i = leftIndex + 1;
             for(int j = leftIndex + 1; j <= rightIndex; j++)
             {
+                AddOneHandler();
                 if (inputList[j] < p)
                 {
                     //Swap(inputList, j, i);
@@ -44,7 +47,25 @@ namespace QuickSort
 
         public int ChoosePivot(List<int> inputList, int leftIndex,int rightIndex)
         {
-            return leftIndex;
+            List<int> medianeThree = new List<int>();
+            medianeThree.Add(inputList[leftIndex]);
+
+            int count = rightIndex - leftIndex + 1;
+            if ((count) % 2 == 1)//непарне
+            {
+                medianeThree.Add(inputList[(int)(count / 2)]);
+            }
+            else
+            {
+                medianeThree.Add(inputList[(int)(count / 2)-1]);
+            }
+            medianeThree.Add(inputList[rightIndex]);
+
+            medianeThree.Sort();
+
+            return medianeThree[1];
+            //return rightIndex;
+            //return leftIndex;
         }
         private void Swap(List<int> inputList, int i, int j)
         {
