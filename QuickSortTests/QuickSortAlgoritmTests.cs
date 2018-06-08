@@ -48,9 +48,9 @@ namespace QuickSort.Tests
             List<int> list = new List<int>() { 3, 8, 2, 5, 1, 4, 7, 6, 12, 10, 9, 11 };
             //act
             QuickSortAlgoritm q = new QuickSortAlgoritm();
-            int j = q.ChoosePivot(list, 0, list.Count - 1);
+            int j = q.ChoosePivot(list, 1, 2);
             //assert
-            Assert.AreEqual(j, 4);
+            Assert.AreEqual(j, 2);
         }
     }
 }

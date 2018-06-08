@@ -23,6 +23,7 @@ namespace QuickSort
             Console.WriteLine(counter);
 
             Console.WriteLine();
+            Console.WriteLine(q.count);
 
             Console.ReadKey();
         }

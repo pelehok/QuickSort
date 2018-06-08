@@ -10,9 +10,10 @@ namespace QuickSort
     {
         public delegate void AddOne();
         public event AddOne AddOneHandler;
+        public int count = 0;
         public int Partition(List<int> inputList, int leftIndex,int rightIndex)
         {
-            int p = inputList[leftIndex];
+            int p = ChoosePivot(inputList, leftIndex, rightIndex).Value;
             int i = leftIndex + 1;
             for(int j = leftIndex + 1; j <= rightIndex; j++)
             {
@@ -37,31 +38,38 @@ namespace QuickSort
         {
             if (leftIndex >= rightIndex) return;
 
-            int i = ChoosePivot(inputList, leftIndex, rightIndex);
+            int i = ChoosePivot(inputList, leftIndex, rightIndex).Key;
             Swap(inputList, leftIndex, i);
 
             int j = Partition(inputList, leftIndex, rightIndex);
+            count += (rightIndex - leftIndex);
             QuickSort(inputList, leftIndex, j - 1);
             QuickSort(inputList, j + 1, rightIndex);
         }
 
-        public int ChoosePivot(List<int> inputList, int leftIndex,int rightIndex)
+        public KeyValuePair<int,int> ChoosePivot(List<int> inputList, int leftIndex,int rightIndex)
         {
-            List<int> medianeThree = new List<int>();
-            medianeThree.Add(inputList[leftIndex]);
+            List<KeyValuePair<int, int>> medianeThree = new List<KeyValuePair<int, int>>();
+            medianeThree.Add(new KeyValuePair<int, int>(leftIndex, inputList[leftIndex]));
 
             int count = rightIndex - leftIndex + 1;
+            if (count == 2)
+            {
+                medianeThree.Add(new KeyValuePair<int, int>(rightIndex, inputList[rightIndex]));
+                return medianeThree.OrderBy(x => x.Value).Last();
+            }
+
             if ((count) % 2 == 1)//непарне
             {
-                medianeThree.Add(inputList[(int)(count / 2)]);
+                medianeThree.Add(new KeyValuePair<int, int>((int)(count / 2), inputList[(int)(count / 2)]));
             }
             else
             {
-                medianeThree.Add(inputList[(int)(count / 2)-1]);
+                medianeThree.Add(new KeyValuePair<int, int>((int)(count / 2) - 1, inputList[(int)(count / 2) - 1]));
             }
-            medianeThree.Add(inputList[rightIndex]);
+            medianeThree.Add(new KeyValuePair<int, int>(rightIndex, inputList[rightIndex]));
 
-            medianeThree.Sort();
+            medianeThree.Sort(Compare);
 
             return medianeThree[1];
             //return rightIndex;
@@ -72,6 +80,10 @@ namespace QuickSort
             int temp = inputList[i];
             inputList[i] = inputList[j];
             inputList[j] = temp;
+        }
+        private int Compare(KeyValuePair<int,int> a, KeyValuePair<int, int> b)
+        {
+            return a.Value.CompareTo(b.Value);
         }
     }
 }
